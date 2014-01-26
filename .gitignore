@@ -5,6 +5,9 @@
 # files for the dex VM
 *.dex
 
+#Eclipse metadata
+.metadata
+
 # Java class files
 *.class
 
