@@ -1,6 +1,0 @@
-package webuiltthiscity;
-
-public class GraphicsInterface {
-	public void drawImage(String image_name, int x,int y);
-	public void drawImage(String image_name, int x,int y,int width,int height);
-}

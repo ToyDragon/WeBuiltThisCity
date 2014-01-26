@@ -1,8 +1,0 @@
-package webuiltthiscity.launcher;
-import webuiltthiscity.*;
-
-public class Launch {
-	public static void main(String[] args){
-		
-	}
-}

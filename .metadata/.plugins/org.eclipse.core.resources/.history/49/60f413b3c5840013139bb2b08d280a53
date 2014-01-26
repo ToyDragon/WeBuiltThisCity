@@ -1,6 +1,0 @@
-package webuiltthiscity.launcher;
-import webuiltthiscity.*;
-
-public class NonAndroidGraphicsInterface implements GraphicsInterface{
-
-}

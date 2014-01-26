@@ -1,6 +1,0 @@
-public interface MachineInterface {
-	public double getDirection();
-	public double[] getCursor();
-	public Graphics getGraphics();
-	public void updateDisplay();
-}

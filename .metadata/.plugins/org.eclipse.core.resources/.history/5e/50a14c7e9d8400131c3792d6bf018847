@@ -1,5 +1,0 @@
-package webuiltthiscity.launcher;
-import webuiltthiscity.MachineInterface;
-public class NonAndroidInterface implements MachineInterface{
-
-}

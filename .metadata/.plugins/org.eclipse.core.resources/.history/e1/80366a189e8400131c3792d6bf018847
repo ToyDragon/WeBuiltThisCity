@@ -1,7 +1,0 @@
-package webuiltthiscity;
-
-public class GameMain {
-	public GameMain(MachineInterface machine_interface){
-		
-	}
-}
