@@ -1,0 +1,8 @@
+package webuiltthiscity;
+
+public class GameMain {
+	MachineInterface machine_interface;
+	public GameMain(MachineInterface machine_interface){
+		this.machine_interface = machine_interface;
+	}
+}

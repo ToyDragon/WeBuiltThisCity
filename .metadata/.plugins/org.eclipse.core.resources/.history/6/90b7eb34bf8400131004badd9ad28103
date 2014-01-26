@@ -1,0 +1,12 @@
+package webuiltthiscity.launcher;
+import javax.swing.JFrame;
+
+import webuiltthiscity.*;
+
+public class Launch {
+	public static void main(String[] args){
+		JFrame frame = new JFrame("We Built This City!");
+		MachineInterface m_interface = new NonAndroidInterface();
+		GameMain game = new GameMain(m_interface);
+	}
+}

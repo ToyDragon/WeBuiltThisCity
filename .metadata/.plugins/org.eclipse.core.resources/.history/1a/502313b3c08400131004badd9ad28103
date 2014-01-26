@@ -1,0 +1,35 @@
+package webuiltthiscity.launcher;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import webuiltthiscity.*;
+
+public class Launch {
+	public static void main(String[] args){
+		
+		
+		final GameMain game = new GameMain();
+		final MachineInterface machine_interface = new NonAndroidInterface();
+		
+		game.setMachineInterface(machine_interface);
+		
+		machine_interface.setGame(game);
+		
+		JFrame frame = new JFrame("We Built This City!");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setPreferredSize(new Dimension(900,600));
+		frame.getContentPane().add(new JPanel(){
+			public void paintComponent(Graphics g){
+				//game.paint(g);
+			}
+		});
+		
+		frame.pack();
+		frame.setVisible(true);
+		
+		game.init();
+	}
+}

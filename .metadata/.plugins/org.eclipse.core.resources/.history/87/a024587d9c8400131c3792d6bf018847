@@ -1,0 +1,4 @@
+public interface MachineInterface {
+	public double getDirection();
+	public double[] getCursor();
+}

@@ -1,0 +1,22 @@
+package webuiltthiscity;
+
+public class GameMain {
+	public static MachineInterface machine_interface;
+	public GameMain(final MachineInterface machine_interface){
+		this.machine_interface = machine_interface;
+		machine_interface.log("Hello World!");
+		Thread game_loop = new Thread(){
+			public void run(){
+				long time_target = 1000/30;
+				while(true){
+					long start_time = System.currentTimeMillis();
+					tick();
+					try{
+						long time_elapsed = System.currentTimeMillis();
+						Thread.sleep(Math.max(0,time_target - time_elapsed));
+					}catch(InterruptedException e){}// this sleep should never be interrupted
+				}
+			}
+		};
+	}
+}

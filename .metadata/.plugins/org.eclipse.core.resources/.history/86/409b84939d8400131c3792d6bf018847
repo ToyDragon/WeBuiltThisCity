@@ -1,0 +1,11 @@
+package webuiltthiscity.launcher;
+import java.awt.Graphics;
+
+import webuiltthiscity.MachineInterface;
+public class NonAndroidInterface implements MachineInterface{
+	public double[] getCursor() {}
+	public double getDirection() {}
+	public Graphics getGraphics() {}
+	public void updateDisplay() {}
+
+}

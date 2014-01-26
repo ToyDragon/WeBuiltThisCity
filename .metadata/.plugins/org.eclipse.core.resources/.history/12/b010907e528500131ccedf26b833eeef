@@ -1,0 +1,72 @@
+package webuiltthiscity.launcher;
+
+import java.util.HashMap;
+
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import webuiltthiscity.*;
+
+
+public class AndroidGraphicsInterface extends android.view.View implements GraphicsInterface{
+	
+	Bitmap buffer;
+	Canvas buffer_canvas;
+	HashMap<String, Bitmap> bitmap_map = new HashMap<String,Bitmap>();
+	public AndroidGraphicsInterface(Context context,int screen_w,int screen_h) {
+		super(context);
+		bitmap_map.put("test_image",BitmapFactory.decodeResource(getResources(),R.drawable.test));
+		buffer = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
+		buffer_canvas = new Canvas(buffer);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void onDraw(Canvas canvas){
+		super.onDraw(canvas);
+		android.util.Log.d("WeBuiltThisCity","Drawing!");
+		canvas.drawBitmap(buffer, 0, 0, null);
+	}
+
+	public void drawImage(String image_name, int x, int y) {
+		// TODO Auto-generated method stub
+		buffer_canvas.drawBitmap(bitmap_map.get(image_name), x, y, null);
+	}
+
+	public void drawImage(String image_name, int x, int y, int w, int h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void drawText(String arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int[] getDrawAreaDimensions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void publish() {
+		// TODO Auto-generated method stub
+		postInvalidate();
+	}
+
+	public void translate(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void fill(int color) {
+		Paint paint = new Paint();
+		paint.setColor(color);
+		android.util.Log.d("WeBuiltThisCity","" + color);
+		buffer_canvas.drawRect(new Rect(0,0,500,500), paint);
+	}
+
+
+}

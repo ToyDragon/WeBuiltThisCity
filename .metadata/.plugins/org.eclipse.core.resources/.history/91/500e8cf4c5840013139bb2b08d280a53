@@ -1,0 +1,22 @@
+package webuiltthiscity.launcher;
+import java.awt.Color;
+
+import webuiltthiscity.*;
+
+public class NonAndroidGraphicsInterface implements GraphicsInterface{
+
+	public NonAndroidGraphicsInterface(){
+		
+	}
+	
+	public void drawImage(String arg0, int arg1, int arg2) {}
+	public void drawImage(String arg0, int arg1, int arg2, int arg3, int arg4) {}
+	public void drawText(String arg0, int arg1, int arg2) {}
+	public void fill(Color arg0) {}
+	public int[] getDrawAreaDimensions() {
+		
+	}
+	public void publish() {}
+	public void translate(int arg0, int arg1) {}
+
+}

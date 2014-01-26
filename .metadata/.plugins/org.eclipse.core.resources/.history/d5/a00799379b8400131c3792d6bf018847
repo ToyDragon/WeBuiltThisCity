@@ -1,0 +1,15 @@
+import java.awt.Graphics;
+
+
+public class Main {
+	public static void main(String[] args){
+		String system = System.getProperty("os");
+		System.out.println(system);
+	}
+	public void tick(){
+		
+	}
+	public void paint(Graphics g){
+		
+	}
+}

@@ -1,0 +1,14 @@
+import java.awt.Graphics;
+
+
+public class Main {
+	public Main(){
+		
+	}
+	public void tick(){
+		
+	}
+	public void paint(Graphics g){
+		
+	}
+}

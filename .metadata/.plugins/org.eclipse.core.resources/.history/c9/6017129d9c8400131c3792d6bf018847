@@ -1,0 +1,15 @@
+import java.awt.Graphics;
+
+
+public class Main {
+	MachineInterface machine_interface;
+	public Main(MachineInterface machine_interface){
+		this.machine_interface = machine_interface;
+	}
+	public void tick(){
+		
+	}
+	public void paint(Graphics g){
+		
+	}
+}

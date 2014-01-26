@@ -1,0 +1,9 @@
+package webuiltthiscity;
+import java.awt.Graphics;
+
+public class MachineInterface {
+	public double getDirection(){return 0;}
+	public double[] getCursor(){return null;}
+	public Graphics getGraphics(){return null;}
+	public void updateDisplay(){}
+}

@@ -1,0 +1,5 @@
+package webuiltthiscity.launcher;
+import webuiltthiscity.*;
+
+public class AndroidMachineInterface implements MachineInterface{
+}

@@ -1,0 +1,9 @@
+
+public class Main {
+	public void tick(){
+		
+	}
+	public void paint(Graphics g){
+		
+	}
+}

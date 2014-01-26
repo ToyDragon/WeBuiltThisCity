@@ -1,0 +1,24 @@
+package webuiltthiscity.launcher;
+import java.awt.Graphics;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import webuiltthiscity.MachineInterface;
+public class NonAndroidInterface implements MachineInterface, MouseMotionListener, MouseListener, KeyListener{
+	public double[] getCursor() {
+		return new double[]{0.0,0.0};
+	}
+	public double getDirection() {
+		return 0;
+	}
+	public Graphics getGraphics() {
+		return null;
+	}
+	public void updateDisplay() {
+		
+	}
+	public void log(String message) {
+		System.out.println(message);
+	}
+}

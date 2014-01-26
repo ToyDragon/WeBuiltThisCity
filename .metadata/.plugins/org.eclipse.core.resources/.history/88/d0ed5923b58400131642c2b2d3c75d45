@@ -1,0 +1,10 @@
+package webuiltthiscity.launcher;
+import webuiltthiscity.*;
+import webuiltthiscity.launcher.*;
+
+public class Launch {
+	public static void main(String[] args){
+		MachineInterface m_interface = new NonAndroidInterface();
+		GameMain game = new GameMain(m_interface);
+	}
+}

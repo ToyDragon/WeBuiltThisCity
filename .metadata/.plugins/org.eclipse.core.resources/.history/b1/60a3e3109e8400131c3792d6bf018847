@@ -1,0 +1,7 @@
+package webuiltthiscity;
+
+public class GameMain {
+	public GameMain(){
+		
+	}
+}

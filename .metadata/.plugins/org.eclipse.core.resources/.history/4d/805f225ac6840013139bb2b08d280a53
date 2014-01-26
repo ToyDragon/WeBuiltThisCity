@@ -1,0 +1,38 @@
+package webuiltthiscity.launcher;
+import java.awt.Color;
+
+import javax.swing.JFrame;
+
+import webuiltthiscity.*;
+
+public class NonAndroidGraphicsInterface implements GraphicsInterface{
+
+	GameMain game;
+	JFrame frame;
+	MachineInterface machine_interface;
+	
+	public NonAndroidGraphicsInterface(){}
+	
+	public void setGame(GameMain game){
+		this.game = game;
+	}
+	
+	public void setFrame(JFrame frame){
+		this.frame = frame;
+	}
+	
+	public void setMachineInterface(MachineInterface machine_interface){
+		this.machine_interface = machine_interface;
+	}
+	
+	public void drawImage(String arg0, int arg1, int arg2) {}
+	public void drawImage(String arg0, int arg1, int arg2, int arg3, int arg4) {}
+	public void drawText(String arg0, int arg1, int arg2) {}
+	public void fill(Color arg0) {}
+	public int[] getDrawAreaDimensions() {
+		return new int[]{frame.getContentPane().getWidth(),frame.getContentPane().getHeight()};
+	}
+	public void publish() {}
+	public void translate(int arg0, int arg1) {}
+
+}
