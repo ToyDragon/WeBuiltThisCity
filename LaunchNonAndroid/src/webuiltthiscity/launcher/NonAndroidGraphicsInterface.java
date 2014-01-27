@@ -20,9 +20,14 @@ public class NonAndroidGraphicsInterface implements GraphicsInterface{
 	
 	public NonAndroidGraphicsInterface(){
 		try {
-			image_map.put("test_image",ImageIO.read(new File("test.png")));
+			//load all resources
+			File image_location = new File("Resources/Images");
+			for(File f : image_location.listFiles()){
+				if(f.getName().endsWith(".png") || f.getName().endsWith(".bmp")){
+					image_map.put(f.getName().substring(0,g.getName().lastIndexOf("\\.")),ImageIO.read(f));
+				}
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -44,13 +49,14 @@ public class NonAndroidGraphicsInterface implements GraphicsInterface{
 		buffer.getGraphics().drawImage(image_map.get(image_name),x,y,null);
 	}
 	public void drawImage(String image_name, int x, int y, int w, int h) {
+		buffer.getGraphics().drawImage(image_map.get(image_name),x,y,w,h,null);
 		
 	}
 	public void drawText(String text, int x, int y) {
-		
+		buffer.getGraphics().drawString(text, x, y);
 	}
 	public void translate(int x, int y) {
-		
+		buffer.getGraphics().translate(x, y);
 	}
 	public void publish() {
 		frame.repaint();
@@ -59,5 +65,7 @@ public class NonAndroidGraphicsInterface implements GraphicsInterface{
 		buffer.getGraphics().setColor(new Color(color));
 		buffer.getGraphics().fillRect(0, 0, 900, 600);
 	}
-
+	public void updateDisplay() {
+		frame.repaint();
+	}
 }

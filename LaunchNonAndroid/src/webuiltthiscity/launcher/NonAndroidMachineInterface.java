@@ -1,5 +1,4 @@
 package webuiltthiscity.launcher;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -22,21 +21,14 @@ public class NonAndroidMachineInterface implements MachineInterface, MouseMotion
 	public void setGame(GameMain game){
 		this.game = game;
 	}
-	
 	public double[] getCursor() {
 		return cursor_pos;
 	}
-	public double getDirection() {
-		return 0;
-	}
-	public Graphics getGraphics() {
-		return null;
-	}
-	public void updateDisplay() {
-		game_frame.repaint();
-	}
 	public void log(String message) {
 		System.out.println(message);
+	}
+	public boolean[] getButtonStatus() {
+		return null;
 	}
 	
 	public void keyPressed(KeyEvent e) {}
@@ -52,7 +44,5 @@ public class NonAndroidMachineInterface implements MachineInterface, MouseMotion
 	}
 	public void mouseMoved(MouseEvent e) {
 		cursor_pos = new double[]{e.getX(),e.getY()};
-	}
-
-	
+	}	
 }

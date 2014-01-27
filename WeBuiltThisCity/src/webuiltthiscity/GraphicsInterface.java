@@ -8,5 +8,5 @@ public interface GraphicsInterface {
 	public void fill(int fill_color);
 	public void drawText(String text,int top_left_x,int top_left_y);
 	public int[] getDrawAreaDimensions();
-	public void publish();
+	public void updateDisplay();
 }
