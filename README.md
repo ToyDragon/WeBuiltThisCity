@@ -19,8 +19,8 @@ All resources (IE graphics or data files) should be saved in the Resources folde
 
 Setup
 -----
-There are eclipse 4 projects in this repo, so eclipse is required. The Android SDK and the OUYA SDK are both required for this project.
+There were set up as eclipse projects and would likely be most easily editted and ran from eclipse.
 
-####Setting up the Workspace
-It is recomended to make a fresh workspace for WeBuiltThisCity.
+####Setting up the Eclipse Workspace
+It is recomended to make a fresh eclipse workspace for WeBuiltThisCity.
 The LaunchNonAndroid and WeBuiltThisCity projects are both regular Java Projects, and can be imported inside of eclipse by using File >> Import >> General >> Existing Projects into Workspace. Select the appropriate root directory of the git repository and select LaunchNonAndroid and WeBuiltThiscity, then click finish. The LaunchAndroid project and the WeBuiltThisCityAndroidLibrary is an android project, and can be imported with File >> Import >> Android >> Existing Android Code into Workspace. Once imported, the WeBuiltthisCityAndroidLibrary project must be explicitly marked as a library. This can be done by right clicking and going to Properties >> Android, and checking the "is Library" box.
