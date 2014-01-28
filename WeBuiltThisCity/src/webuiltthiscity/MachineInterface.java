@@ -1,5 +1,4 @@
 package webuiltthiscity;
-import webuiltthiscity.*;
 
 public interface MachineInterface{
 	public double[] getCursor();

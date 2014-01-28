@@ -23,6 +23,7 @@ public class Launch {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setPreferredSize(new Dimension(900,600));
 		frame.getContentPane().add(new JPanel(){
+			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g){
 				g.drawImage(graphics_interface.buffer,0,0,null);
 			}

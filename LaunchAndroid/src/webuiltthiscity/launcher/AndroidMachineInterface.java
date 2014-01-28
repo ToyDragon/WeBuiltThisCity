@@ -1,7 +1,5 @@
 package webuiltthiscity.launcher;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
 import webuiltthiscity.*;
 
 public class AndroidMachineInterface implements MachineInterface{

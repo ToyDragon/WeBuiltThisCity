@@ -38,3 +38,4 @@ LaunchNonAndroid/Resources/*
 WeBuiltThisCityAndroidLibrary
 
 #Library jar files
+*.jar

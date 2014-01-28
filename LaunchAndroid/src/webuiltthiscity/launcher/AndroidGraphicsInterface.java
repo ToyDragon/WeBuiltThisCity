@@ -1,7 +1,7 @@
 package webuiltthiscity.launcher;
 
 import java.util.HashMap;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import webuiltthiscity.*;
 
 
+@SuppressLint("ViewConstructor")
 public class AndroidGraphicsInterface extends android.view.View implements GraphicsInterface{
 	
 	Bitmap buffer;
