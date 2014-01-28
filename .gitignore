@@ -36,3 +36,5 @@ proguard/
 LaunchAndroid/assets/*
 LaunchNonAndroid/Resources/*
 WeBuiltThisCityAndroidLibrary
+
+#Library jar files

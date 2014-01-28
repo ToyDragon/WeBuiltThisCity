@@ -44,6 +44,6 @@ public class GameMain {
 		
 		graphics_interface.fill(0xffffffff);
 		graphics_interface.drawImage("test_image", x, 0);
-		graphics_interface.publish();
+		graphics_interface.updateDisplay();
 	}
 }

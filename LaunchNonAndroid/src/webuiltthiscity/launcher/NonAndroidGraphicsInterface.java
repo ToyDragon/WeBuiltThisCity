@@ -22,9 +22,11 @@ public class NonAndroidGraphicsInterface implements GraphicsInterface{
 		try {
 			//load all resources
 			File image_location = new File("Resources/Images");
+			System.out.println(image_location.isDirectory());
+			System.out.println(image_location.getAbsolutePath());
 			for(File f : image_location.listFiles()){
 				if(f.getName().endsWith(".png") || f.getName().endsWith(".bmp")){
-					image_map.put(f.getName().substring(0,g.getName().lastIndexOf("\\.")),ImageIO.read(f));
+					image_map.put(f.getName().substring(0,f.getName().lastIndexOf(".")),ImageIO.read(f));
 				}
 			}
 		} catch (IOException e) {

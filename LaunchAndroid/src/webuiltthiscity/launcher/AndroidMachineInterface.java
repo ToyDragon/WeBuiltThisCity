@@ -7,32 +7,23 @@ import webuiltthiscity.*;
 public class AndroidMachineInterface implements MachineInterface{
 
 	Activity main_activity;
-	
+	GameMain game;
 	public void setMainActivity(Activity main_activity){
 		this.main_activity = main_activity;
 	}
-	
 	public double[] getCursor() {
-		// TODO Auto-generated method stub
 		return new double[]{10.0,15.0};
 	}
-
 	public double getDirection() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	public void log(String message) {
 		android.util.Log.d("WeBuiltThisCity",message);
 	}
-
-	public void setGame(GameMain arg0) {
-		// TODO Auto-generated method stub
-		
+	public boolean[] getButtonStatus() {
+		return null;
 	}
-
-	public void updateDisplay() {
-		// TODO Auto-generated method stub
-		
+	public void setGame(GameMain game) {
+		this.game = game;
 	}
 }

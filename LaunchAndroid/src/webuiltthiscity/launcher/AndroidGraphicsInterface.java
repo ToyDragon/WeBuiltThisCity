@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import webuiltthiscity.*;
 
 
@@ -17,57 +16,59 @@ public class AndroidGraphicsInterface extends android.view.View implements Graph
 	Bitmap buffer;
 	Bitmap buffer1,buffer2;
 	Canvas buffer_canvas;
+	Canvas canvas1,canvas2;
 	HashMap<String, Bitmap> bitmap_map = new HashMap<String,Bitmap>();
 	int screen_w,screen_h;
 	public AndroidGraphicsInterface(Context context,int screen_w,int screen_h) {
 		super(context);
-		bitmap_map.put("test_image",BitmapFactory.decodeResource(getResources(),R.drawable.test));
+		bitmap_map.put("test_image",BitmapFactory.decodeResource(getResources(),R.drawable.test_image));
 		buffer1 = Bitmap.createBitmap(screen_w, screen_h, Bitmap.Config.ARGB_8888);
 		buffer2 = Bitmap.createBitmap(screen_w, screen_h, Bitmap.Config.ARGB_8888);
 		buffer = buffer1;
-		buffer_canvas = new Canvas(buffer);
+		canvas1 = new Canvas(buffer1);
+		canvas2 = new Canvas(buffer2);
+		buffer_canvas = canvas1;
 		this.screen_w = screen_w;
 		this.screen_h = screen_h;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public synchronized void onDraw(Canvas canvas){
 		super.onDraw(canvas);
 		android.util.Log.d("WeBuiltThisCity","Drawing!");
 		canvas.drawBitmap(buffer, 0, 0, null);
-		if(buffer == buffer1)buffer = buffer2;
-		else buffer = buffer1;
-		buffer_canvas = new Canvas(buffer);
+		if(buffer == buffer1){
+			buffer = buffer2;
+			buffer_canvas = canvas2;
+		}
+		else{
+			buffer = buffer1;
+			buffer_canvas = canvas1;
+		}
 	}
 
 	public synchronized void drawImage(String image_name, int x, int y) {
-		// TODO Auto-generated method stub
 		buffer_canvas.drawBitmap(bitmap_map.get(image_name), x, y, null);
 	}
 
 	public synchronized void drawImage(String image_name, int x, int y, int w, int h) {
-		// TODO Auto-generated method stub
-		
+		buffer_canvas.drawBitmap(bitmap_map.get(image_name), null, new Rect(x,y,w,h), null);
 	}
 
-	public synchronized void drawText(String arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		
+	public synchronized void drawText(String text, int x, int y) {
+		buffer_canvas.drawText(text, 0, text.length(), x, y, null);
 	}
 
 	public int[] getDrawAreaDimensions() {
-		// TODO Auto-generated method stub
-		return null;
+		return new int[]{screen_w,screen_h};
 	}
 
-	public void publish() {
-		// TODO Auto-generated method stub
+	public void updateDisplay() {
 		postInvalidate();
 	}
 
-	public void translate(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+	public void translate(int x, int y) {
+		canvas1.translate(x, y);
+		canvas2.translate(x, y);
 	}
 
 	public synchronized void fill(int color) {
@@ -76,6 +77,4 @@ public class AndroidGraphicsInterface extends android.view.View implements Graph
 		android.util.Log.d("WeBuiltThisCity","" + color);
 		buffer_canvas.drawRect(new Rect(0,0,screen_w,screen_h), paint);
 	}
-
-
 }
