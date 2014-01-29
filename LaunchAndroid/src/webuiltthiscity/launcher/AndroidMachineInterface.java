@@ -19,7 +19,7 @@ public class AndroidMachineInterface implements MachineInterface{
 		android.util.Log.d("WeBuiltThisCity",message);
 	}
 	public boolean[] getButtonStatus() {
-		return null;
+		return new boolean[5];
 	}
 	public void setGame(GameMain game) {
 		this.game = game;

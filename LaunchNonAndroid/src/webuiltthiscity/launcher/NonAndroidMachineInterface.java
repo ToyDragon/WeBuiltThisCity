@@ -12,6 +12,8 @@ import webuiltthiscity.MachineInterface;
 public class NonAndroidMachineInterface implements MachineInterface, MouseMotionListener, MouseListener, KeyListener{
 	
 	double[] cursor_pos = new double[2];
+	boolean[] buttons = new boolean[5];
+	String[] button_labels = {"up","down","left","right","jump"};
 	JFrame game_frame;
 	GameMain game;
 	
@@ -28,11 +30,43 @@ public class NonAndroidMachineInterface implements MachineInterface, MouseMotion
 		System.out.println(message);
 	}
 	public boolean[] getButtonStatus() {
-		return null;
+		return buttons;
 	}
 	
-	public void keyPressed(KeyEvent e) {}
-	public void keyReleased(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_W){
+			buttons[0] = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_A){
+			buttons[1] = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_S){
+			buttons[2] = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_D){
+			buttons[3] = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+			buttons[4] = true;
+		}
+	}
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_W){
+			buttons[0] = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_A){
+			buttons[1] = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_S){
+			buttons[2] = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_D){
+			buttons[3] = false;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+			buttons[4] = false;
+		}
+	}
 	public void keyTyped(KeyEvent e) {}
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}

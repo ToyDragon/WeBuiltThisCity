@@ -62,7 +62,7 @@ public class Launch {
 		frame.getContentPane().add(new JPanel(){
 			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g){
-				g.drawImage(graphics_interface.buffer,0,0,null);
+				g.drawImage(graphics_interface.buffer,0,0,getWidth(),getHeight(),null);
 			}
 		});
 		

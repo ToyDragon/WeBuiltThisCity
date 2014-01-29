@@ -23,6 +23,8 @@ public class AndroidGraphicsInterface extends android.view.View implements Graph
 	public AndroidGraphicsInterface(Context context,int screen_w,int screen_h) {
 		super(context);
 		bitmap_map.put("test_image",BitmapFactory.decodeResource(getResources(),R.drawable.test_image));
+		bitmap_map.put("block",BitmapFactory.decodeResource(getResources(),R.drawable.block));
+		bitmap_map.put("baseball_thing",BitmapFactory.decodeResource(getResources(),R.drawable.baseball_thing));
 		buffer1 = Bitmap.createBitmap(screen_w, screen_h, Bitmap.Config.ARGB_8888);
 		buffer2 = Bitmap.createBitmap(screen_w, screen_h, Bitmap.Config.ARGB_8888);
 		buffer = buffer1;
@@ -52,11 +54,12 @@ public class AndroidGraphicsInterface extends android.view.View implements Graph
 	}
 
 	public synchronized void drawImage(String image_name, int x, int y, int w, int h) {
-		buffer_canvas.drawBitmap(bitmap_map.get(image_name), null, new Rect(x,y,w,h), null);
+		buffer_canvas.drawBitmap(bitmap_map.get(image_name), new Rect(0,0,bitmap_map.get(image_name).getWidth(),bitmap_map.get(image_name).getHeight()), new Rect(x,y,w,h), null);
 	}
 
 	public synchronized void drawText(String text, int x, int y) {
-		buffer_canvas.drawText(text, 0, text.length(), x, y, null);
+		Paint p = new Paint();
+		buffer_canvas.drawText(text, 0, text.length(), x, y, p);
 	}
 
 	public int[] getDrawAreaDimensions() {
