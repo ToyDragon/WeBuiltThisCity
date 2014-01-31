@@ -11,9 +11,9 @@ public class GameMain {
 	public double velx,vely;
 	public double gravity = 4;
 	public double jumpspeed = 40;
-	public double speed = 7;
+	public double speed = 10;
 	boolean collided_last_tick;
-	public int frequency = 10;
+	public int frequency = 12;
 	public int tick = 0;
 	
 	int life = 20;
@@ -151,10 +151,18 @@ public class GameMain {
 			int width = graphics_interface.getDrawAreaDimensions()[0];
 			int height = graphics_interface.getDrawAreaDimensions()[1];
 			b.x = width;
-			b.y = (int)(Math.random()*.75*height);// + .125*height);
-			b.w = (int)(Math.random()*125*width + .125*width);
+			b.y = (int)(Math.random()*height);
+			b.w = (int)(Math.random()*.125*width + .125*width);
 			b.h = (int)(Math.random()*.0625*height + .0625*height);
-			blocks.add(b);
+			
+			boolean good_spot = true;
+			for(Block bb : blocks){
+				double dist = b.dist(bb);
+				machine_interface.log(""+dist);
+				if(dist < 15)good_spot = false;
+			}
+			if(good_spot)
+				blocks.add(b);
 			//machine_interface.log("" + b.x + ", " + b.x + ", " + b.w + ", " + b.h);
 		}
 		collided_last_tick = collide;
@@ -170,7 +178,7 @@ public class GameMain {
 	public void paint(){
 		//int x = 50  + (int) (50 * Math.sin(System.currentTimeMillis()/750d));
 		
-		graphics_interface.fill(0xffffffff);
+		graphics_interface.fill(0x000000ff);
 		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, 100, 100);
 		
 		for(Block b : blocks){
