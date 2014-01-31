@@ -8,15 +8,25 @@ public class GameMain {
 	public static int block_speed = 8;
 	public static int base_speed = 8;
 	public int x,y;
+	public int player_w = 50,player_h = 50;
 	public double velx,vely;
 	public double gravity = 4;
+<<<<<<< HEAD
 	public double jumpspeed = 40;
 	public double speed = 10;
 	boolean collided_last_tick;
 	public int frequency = 12;
+=======
+	public double jumpspeed = 25;
+	public double speed = 10;
+	boolean collided_last_tick;
+	public int frequency = 9;
+>>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 	public int tick = 0;
 	
-	int life = 20;
+	int score = 0;
+	
+	int life = 5;
 	
 	ArrayList<Block> blocks = new ArrayList<Block>();
 	
@@ -79,7 +89,7 @@ public class GameMain {
 		}
 		if(buttons[4]){// jump
 			if(collided_last_tick){
-				machine_interface.log("Jump!");
+				//machine_interface.log("Jump!");
 				vely = -jumpspeed;
 			}
 		}
@@ -99,9 +109,9 @@ public class GameMain {
 		for(Block b : blocks){
 			int[][] player_corners = new int[][]{
 					{nx,ny},
-					{nx+100,ny},
-					{nx+100,ny+100},
-					{nx,ny+100}
+					{nx+player_w,ny},
+					{nx+player_w,ny+player_h},
+					{nx,ny+player_h}
 			};
 			for(int i = 0; i < 4; i++){
 				int tx = player_corners[i][0];
@@ -114,18 +124,22 @@ public class GameMain {
 				}
 			}
 		}
-		
+		if(collide)nx -= block_speed;
 		x = nx;
 		y = ny;
-		if(y >= graphics_interface.getDrawAreaDimensions()[1] + 100){
-			y -= graphics_interface.getDrawAreaDimensions()[1] + 200;
+		if(y >= graphics_interface.getDrawAreaDimensions()[1] + player_h){
+			y -= graphics_interface.getDrawAreaDimensions()[1] + player_h;
 			life--;
 		}
-		if(x <= -200){
-			x += graphics_interface.getDrawAreaDimensions()[0] + 50;
+		if(x <= -player_w){
+			x += graphics_interface.getDrawAreaDimensions()[0] + player_w;
+			life-=5;
 		}
-		if(x >= graphics_interface.getDrawAreaDimensions()[0] + 100){
-			x -= graphics_interface.getDrawAreaDimensions()[0] + 150;
+		if(x >= graphics_interface.getDrawAreaDimensions()[0]){
+			x -= graphics_interface.getDrawAreaDimensions()[0] + player_w;
+			life+=4;
+			score++;
+			base_speed+=2;
 		}
 		if(collide){
 			y -= min_y_dist;
@@ -144,7 +158,7 @@ public class GameMain {
 			}
 		}
 		tick++;
-		machine_interface.log("" + tick + " < " + frequency);
+		//machine_interface.log("" + tick + " < " + frequency);
 		if(tick >= frequency){
 			tick = 0;
 			Block b = new Block();
@@ -158,8 +172,13 @@ public class GameMain {
 			boolean good_spot = true;
 			for(Block bb : blocks){
 				double dist = b.dist(bb);
+<<<<<<< HEAD
 				machine_interface.log(""+dist);
 				if(dist < 15)good_spot = false;
+=======
+				//machine_interface.log(""+dist);
+				if(dist < 45)good_spot = false;
+>>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 			}
 			if(good_spot)
 				blocks.add(b);
@@ -178,14 +197,19 @@ public class GameMain {
 	public void paint(){
 		//int x = 50  + (int) (50 * Math.sin(System.currentTimeMillis()/750d));
 		
+<<<<<<< HEAD
 		graphics_interface.fill(0x000000ff);
 		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, 100, 100);
+=======
+		graphics_interface.fill((57 << 16) + (112 << 8) + (143 << 0));
+		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, player_w, player_h);
+>>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 		
 		for(Block b : blocks){
 			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
 		}
 		
-		graphics_interface.drawText( "" + life, 20,20);
+		graphics_interface.drawText( "" + life + "     " + score, 20,20);
 		graphics_interface.updateDisplay();
 	}
 }
