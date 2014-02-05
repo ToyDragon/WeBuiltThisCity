@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="webuiltthiscity.something"
+    package="com.example.webuiltthiscityandroidlibrary"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="13"
         android:targetSdkVersion="18" />
 
     <application

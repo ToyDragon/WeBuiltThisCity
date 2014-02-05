@@ -1,11 +1,11 @@
 package webuiltthiscity;
 
-public class Block {
+public class Shark {
 	int x,y,w,h;
 	public void tick(){
 		x -= GameMain.block_speed;
 	}
-	public double dist(Block b){
+	public double dist(Shark b){
 		int[][] ps = new int[][]{
 				{x,y},
 				{x+w,y},

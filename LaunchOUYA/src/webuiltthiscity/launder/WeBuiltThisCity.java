@@ -1,5 +1,6 @@
 package webuiltthiscity.launder;
 
+import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Point;

@@ -11,17 +11,10 @@ public class GameMain {
 	public int player_w = 50,player_h = 50;
 	public double velx,vely;
 	public double gravity = 4;
-<<<<<<< HEAD
-	public double jumpspeed = 40;
-	public double speed = 10;
-	boolean collided_last_tick;
-	public int frequency = 12;
-=======
 	public double jumpspeed = 25;
 	public double speed = 10;
 	boolean collided_last_tick;
 	public int frequency = 9;
->>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 	public int tick = 0;
 	
 	int score = 0;
@@ -172,13 +165,8 @@ public class GameMain {
 			boolean good_spot = true;
 			for(Block bb : blocks){
 				double dist = b.dist(bb);
-<<<<<<< HEAD
-				machine_interface.log(""+dist);
-				if(dist < 15)good_spot = false;
-=======
 				//machine_interface.log(""+dist);
 				if(dist < 45)good_spot = false;
->>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 			}
 			if(good_spot)
 				blocks.add(b);
@@ -197,13 +185,8 @@ public class GameMain {
 	public void paint(){
 		//int x = 50  + (int) (50 * Math.sin(System.currentTimeMillis()/750d));
 		
-<<<<<<< HEAD
-		graphics_interface.fill(0x000000ff);
-		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, 100, 100);
-=======
 		graphics_interface.fill((57 << 16) + (112 << 8) + (143 << 0));
 		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, player_w, player_h);
->>>>>>> e1c413995c5e364de4b30d055cdab124d8bd4f73
 		
 		for(Block b : blocks){
 			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
