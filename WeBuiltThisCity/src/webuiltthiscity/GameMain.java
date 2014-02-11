@@ -90,6 +90,8 @@ public class GameMain {
 		first_shark.w = screen_w;
 		first_shark.h = 75;
 		
+		machine_interface.log("First shark top: " + first_shark.y);
+		
 		sharks.add(first_shark);
 	}
 	public void handleSharks(){
@@ -131,7 +133,8 @@ public class GameMain {
 				if(dist < 45)good_spot = false;
 			}
 			
-			if(good_spot) sharks.add(b);
+			//if(good_spot)
+				sharks.add(b);
 		}
 	}
 	//tick the world one frame
