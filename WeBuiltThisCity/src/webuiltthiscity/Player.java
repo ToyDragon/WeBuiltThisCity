@@ -26,6 +26,8 @@ public class Player {
 	public int score = 0;
 	public GameMain game;
 	
+	//public int[] screenDimensions = graphics_interface.getAreaDrawDimensions();
+	
 	public Player(GameMain game){
 		this.game = game;
 		
@@ -153,6 +155,15 @@ public class Player {
 		//update the players score
 		long elapsed_time =  System.currentTimeMillis() - game.start_time;
 		score = (int) (elapsed_time/1000);
+		
+		
+		
+		
+		//THIS IS THE DEATH CODE
+		if(y > game.graphics_interface.getDrawAreaDimensions()[1]) {
+			System.out.println(--life);
+		}
+		
 		
 		
 		//DEBUG
