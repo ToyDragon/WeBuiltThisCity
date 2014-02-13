@@ -90,8 +90,6 @@ public class GameMain {
 		first_shark.w = screen_w;
 		first_shark.h = 75;
 		
-		machine_interface.log("First shark top: " + first_shark.y);
-		
 		sharks.add(first_shark);
 	}
 	public void handleSharks(){

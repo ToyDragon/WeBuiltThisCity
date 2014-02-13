@@ -63,11 +63,6 @@ public class Player {
 			velx = 0;
 		}
 		
-		//make sure player doesn't fall through the floor if hes on a shark
-		/*if(collided_last_tick){
-			vely = Math.min(0, vely);
-		}*/
-		
 		vely += gravity;
 		
 		//predict the next player position and test its collision
@@ -78,7 +73,6 @@ public class Player {
 		
 		//collide is whether or not he will collide this frame
 		//min_y_Dist is the maximum distance he can fall without hitting a shark
-		boolean collide = false;
 		
 		int max_x_dist = (int)velx;
 		int max_y_dist = (int)vely;
@@ -139,6 +133,17 @@ public class Player {
 		boolean collided_y = max_y_dist != vely;
 		boolean collided_x = max_x_dist != velx;
 		
+		if(collided_y || collided_x){
+			max_x_dist -= Shark.shark_speed;
+		}
+		if(collided_x){
+			//this is temporary, needs more work
+			
+			//move player up away from shark
+			y -= height*2;
+			life--;
+		}
+		
 		//update velocities to reflect collisions
 		velx = max_x_dist;
 		vely = max_y_dist;
@@ -156,80 +161,11 @@ public class Player {
 		long elapsed_time =  System.currentTimeMillis() - game.start_time;
 		score = (int) (elapsed_time/1000);
 		
-		
-		
-		
 		//THIS IS THE DEATH CODE
 		if(y > game.graphics_interface.getDrawAreaDimensions()[1]) {
+			y = -height;
+			vely = 0;
 			System.out.println(--life);
 		}
-		
-		
-		
-		//DEBUG
-		/*
-		for(Shark b : game.sharks){
-			//check player collisions with each corner of the player
-			int[][] player_corners = new int[][]{
-					{nx,ny},
-					{nx+width,ny},
-					{nx+width,ny+height},
-					{nx,ny+height}
-			};
-			for(int i = 0; i < 4; i++){
-				
-				//extract point from array to make it easier to read
-				int test_x = player_corners[i][0];
-				int test_y = player_corners[i][1];
-				
-				int shark_tl_x = b.x - Shark.shark_speed;
-				int shark_tl_y = b.y;
-				int shark_br_x = b.x + b.w - Shark.shark_speed;
-				int shark_br_y = b.y + b.h;
-				
-				//if this point is inside of the shark, the player will collide with the shark
-				if(test_x >= shark_tl_x && test_x <= shark_br_x &&
-				   test_y >= shark_tl_y && test_y <= shark_br_y){
-					//if the distance to this shark is the shortest distance recorded, this distance
-					//is the minimum y distance he can fall
-					int y_dist_top = test_y - shark_tl_y;
-					int y_dist_bot = test_y - shark_br_y;
-					
-					int x_dist_left = test_x - shark_tl_x;
-					int x_dist_right = test_x - shark_tl_x;
-					game.machine_interface.log("BEBUG DO WE COLLIDE?: " + max_y_dist);
-
-					game.machine_interface.log("Dvel: " + max_y_dist);
-					game.machine_interface.log("debug: " + y_dist_top + ", " + y_dist_bot);
-					
-					//if this dist is the same direction as the movement in the y direction
-					if( (y_dist_top < 0 && vely < 0) || (y_dist_top > 0 && vely > 0))
-						//if this dist is smaller in magnitude than the record
-						if(Math.abs(max_y_dist) > Math.abs(y_dist_top))
-							max_y_dist = y_dist_top;
-
-					//if this dist is the same direction as the movement in the y direction
-					if( (y_dist_bot < 0 && vely < 0) || (y_dist_bot > 0 && vely > 0))
-						//if this dist is smaller in magnitude than the record
-						if(Math.abs(max_y_dist) > Math.abs(y_dist_bot))
-							max_y_dist = y_dist_bot;
-					
-					//if this dist is the same direction as the movement in the y direction
-					if( (x_dist_left < 0 && velx < 0) || (x_dist_left > 0 && velx > 0))
-						//if this dist is smaller in magnitude than the record
-						if(Math.abs(max_x_dist) > Math.abs(x_dist_left))
-							max_x_dist = x_dist_left;
-
-					//if this dist is the same direction as the movement in the y direction
-					if( (x_dist_right < 0 && velx < 0) || (x_dist_right > 0 && velx > 0))
-						//if this dist is smaller in magnitude than the record
-						if(Math.abs(max_x_dist) > Math.abs(x_dist_right))
-							max_x_dist = x_dist_right;
-
-					game.machine_interface.log("Dvel post: " + max_y_dist);
-				}
-			
-			}
-		}*/
 	}
 }
