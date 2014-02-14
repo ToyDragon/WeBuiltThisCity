@@ -19,7 +19,7 @@ public class GameMain {
 	public int tick = 0;
 	
 	Player player;	
-	ArrayList<Shark> sharks;
+	ArrayList<CollisionObject> objects;
 	
 	public GameMain(){}
 	
@@ -80,7 +80,7 @@ public class GameMain {
 		int screen_w = graphics_interface.getDrawAreaDimensions()[0];
 		int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 		
-		sharks = new ArrayList<Shark>();
+		objects = new ArrayList<CollisionObject>();
 		
 		//all sharks spawn off screen, so this one provides an initial platform for beiber
 		Shark first_shark = new Shark();
@@ -90,14 +90,14 @@ public class GameMain {
 		first_shark.w = screen_w;
 		first_shark.h = 75;
 		
-		sharks.add(first_shark);
+		objects.add(first_shark);
 	}
 	public void handleSharks(){
 		//remove all of the sharks that are off screen from the physics and drawing
-		for(int i = sharks.size()-1; i >= 0; i--){
-			sharks.get(i).tick();
-			if(sharks.get(i).x + sharks.get(i).w < -50){
-				sharks.remove(i);
+		for(int i = objects.size()-1; i >= 0; i--){
+			objects.get(i).tick();
+			if(objects.get(i).x + objects.get(i).w < -50){
+				objects.remove(i);
 			}
 		}
 			
@@ -126,12 +126,12 @@ public class GameMain {
 			//spawned in a way that isn't impossible. shark.dist is dumb right now
 			//so this doesn't work right
 			boolean good_spot = true;
-			for(Shark bb : sharks){
+			for(CollisionObject bb : objects){
 				good_spot = good_spot && b.overlaps(bb);
 			}
 			
 			//if(good_spot)
-				sharks.add(b);
+				objects.add(b);
 		}
 	}
 	//tick the world one frame
@@ -163,7 +163,7 @@ public class GameMain {
 		graphics_interface.drawImage("baseball_thing", player.x, player.y, player.width, player.height);
 		
 		//draw all of the sharks
-		for(Shark b : sharks){
+		for(CollisionObject b : objects){
 			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
 		}
 		
