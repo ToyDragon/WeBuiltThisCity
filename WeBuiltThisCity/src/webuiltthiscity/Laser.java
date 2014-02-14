@@ -10,6 +10,15 @@ public class Laser extends CollisionObject{
 		laser_speed = 17;
 	}
 	
+	public Laser(int x, int y)
+	{
+		super();
+		this.x = x;
+		this.y = y;
+		
+		laser_speed = 17;
+	}
+	
 	public void tick()
 	{
 		x -= laser_speed;

@@ -19,7 +19,7 @@ public class GameMain {
 	public int tick = 0;
 	
 	Player player;	
-	ArrayList<CollisionObject> collision_objects;
+	static ArrayList<CollisionObject> collision_objects;
 	
 	public GameMain(){}
 	
@@ -29,7 +29,6 @@ public class GameMain {
 	public void setGraphicsInterface(GraphicsInterface graphics_interface){
 		this.graphics_interface = graphics_interface;
 	}
-	
 	public void init(){
 		//grab start time
 		start_time = System.currentTimeMillis();
