@@ -24,5 +24,9 @@ public class Laser extends CollisionObject{
 	{
 		return "laser";
 	}
+	
+	public String getImage() {
+		return "shark";
+	}
 
 }

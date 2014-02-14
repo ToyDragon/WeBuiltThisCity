@@ -24,4 +24,8 @@ public class Shark extends CollisionObject{
 	{
 		return "shark";
 	}
+	
+	public String getImage() {
+		return "shark";
+	}
 }

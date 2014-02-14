@@ -19,7 +19,7 @@ public class GameMain {
 	public int tick = 0;
 	
 	Player player;	
-	ArrayList<CollisionObject> collision_objects;
+	public static ArrayList<CollisionObject> collision_objects;
 	
 	public GameMain(){}
 	
@@ -160,11 +160,11 @@ public class GameMain {
 		graphics_interface.fill(beiber_blue);
 		
 		//draw beiber
-		graphics_interface.drawImage("baseball_thing", player.x, player.y, player.width, player.height);
+		graphics_interface.drawImage(player.getImage(), player.x, player.y, player.width, player.height);
 		
 		//draw all of the sharks
 		for(CollisionObject b : collision_objects){
-			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
+			graphics_interface.drawImage(b.getImage(), b.x, b.y, b.w, b.h);
 		}
 		
 		//draw the player life and score in the top left of the screen

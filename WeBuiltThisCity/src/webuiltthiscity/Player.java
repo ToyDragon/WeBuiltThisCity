@@ -1,12 +1,6 @@
 package webuiltthiscity;
 
-public class Player {
-	//x,y position of the top left of the player, and the width,height of the player
-	public int x,y;
-	public int width = 50,height = 50;
-	
-	//velx is the change in the players x per tick
-	public double velx,vely;
+public class Player extends CollisionObject{
 	
 	public double velx_cap = 1000,vely_cap = 30;
 	
@@ -24,7 +18,7 @@ public class Player {
 	public int last_velx;
 	public int last_vely;
 	
-	private int stunTime = 30;
+	private int stunTime = 0;
 	
 	public int life = 1;
 	public int score = 0;
@@ -34,7 +28,8 @@ public class Player {
 	
 	public Player(GameMain game){
 		this.game = game;
-		
+		width = 50;
+		height = 50;
 		int screen_w = game.graphics_interface.getDrawAreaDimensions()[0];
 		int screen_h = game.graphics_interface.getDrawAreaDimensions()[1];
 		
@@ -52,7 +47,7 @@ public class Player {
 		
 		detectCollisionsAndStep();
 		
-		checkIfEaten();
+		//checkIfEaten();
 		
 		if(stunTime > 0)
 			stunTime--;
@@ -67,7 +62,7 @@ public class Player {
 		//if(buttons[MachineInterface.BUTTON_UP]){}// up
 		//if(buttons[MachineInterface.BUTTON_DOWN]){}// down
 		
-		if(stunTime == 0)
+		if(stunTime <= 0)
 		{
 			if(buttons[MachineInterface.BUTTON_LEFT])velx = -speed;
 			
@@ -79,10 +74,10 @@ public class Player {
 					vely = -jumpspeed;
 				}
 			}
-		}
-		//if the player isn't trying to move, set his xvel to 0 so he isnt sliding around everywhere
-		if(!buttons[MachineInterface.BUTTON_LEFT] && !buttons[MachineInterface.BUTTON_RIGHT]){
-			velx = 0;
+			//if the player isn't trying to move, set his xvel to 0 so he isnt sliding around everywhere
+			if(!buttons[MachineInterface.BUTTON_LEFT] && !buttons[MachineInterface.BUTTON_RIGHT]){
+				velx = 0;
+			}
 		}
 		
 	}
@@ -95,7 +90,7 @@ public class Player {
 			,{x,y+height}
 		};
 		boolean eaten = false;
-		for(CollisionObject s : game.collision_objects){
+		for(CollisionObject s : GameMain.collision_objects){
 			int[][] s_corners = s.getCorners();
 			for(int i = 0; i < corners.length; i++){
 				if(corners[i][0] > s_corners[0][0] && corners[i][0] < s_corners[2][0]
@@ -114,81 +109,26 @@ public class Player {
 		stunTime = 5;
 	}
 	private void detectCollisionsAndStep(){	
-		vely += gravity;
-	
-		//predict the next player position and test its collision
-		int nx = (int) (x+velx);
-		int ny = (int) (y+vely);
 
-		//PHYICS---------------------------------------------------------------------------------------------------
+		vely += gravity;
+		
+		//predict the next player position and test its collision
+		game.machine_interface.log(""+velx+ " : " + vely);
+		int[] max_dist = new int[]{(int)velx,(int)vely};
+		for(CollisionObject o : GameMain.collision_objects){
+			int[] this_dist = detectCollision(o);
+			game.machine_interface.log(o.getImage() + " " +max_dist[0]+ " : " + max_dist[1]);
+			if(this_dist[0] < max_dist[0])max_dist[0] = this_dist[0];
+			if(this_dist[1] < max_dist[1])max_dist[1] = this_dist[1];
+		}
+		
+		game.machine_interface.log(""+max_dist[0]+ " : " + max_dist[1]);
+		
+		int max_x_dist = max_dist[0];
+		int max_y_dist = max_dist[1];
 		
 		//collide is whether or not he will collide this frame
 		//min_y_Dist is the maximum distance he can fall without hitting a shark
-		
-		int max_x_dist = (int)velx;
-		int max_y_dist = (int)vely;
-		
-		
-		//test for collision with all sharks, and only let them fall to the closest shark and not through it
-		for(CollisionObject b : game.collision_objects){
-			//check player collisions with each corner of the player
-			int[][] player_corners = new int[][]{
-					 {nx,ny}
-					,{nx+width,ny}
-					,{nx+width,ny+height}
-					,{nx,ny+height}
-			};
-			for(int i = 0; i < player_corners.length; i++){
-				
-				//extract point from array to make it easier to read
-				int test_x = player_corners[i][0];
-				int test_y = player_corners[i][1];
-				
-				int colobj_tl_x = b.x - b.getSpeed();
-				int colobj_tl_y = b.y;
-				int colobj_br_x = b.x + b.w - b.getSpeed();
-				int colobj_br_y = b.y + b.h;
-				
-				//if this point is inside of the shark, the player will collide with the shark
-				if(test_x >= colobj_tl_x && test_x <= colobj_br_x &&
-				   test_y >= colobj_tl_y && test_y <= colobj_br_y){
-					//if the distance to this shark is the shortest distance recorded, this distance
-					//is the minimum y distance he can fall
-					int y_dist_top = colobj_tl_y - test_y;
-					int y_dist_bot = colobj_br_y - test_y;
-					
-					int x_dist_left =  colobj_tl_x - test_x;
-					int x_dist_right = colobj_tl_x - test_x;
-					
-					//if this dist is the same direction as the movement in the y direction
-					if(b.getType() == "shark")
-					{
-						if( (y_dist_top < 0 && vely > 0) || (y_dist_top > 0 && vely < 0))
-							//if this dist is smaller in magnitude than the record
-							if(Math.abs(max_y_dist) >= Math.abs(y_dist_top))
-								max_y_dist = (int)vely + y_dist_top;
-	
-						if( (y_dist_bot < 0 && vely > 0) || (y_dist_bot > 0 && vely < 0))
-							if(Math.abs(max_y_dist) >= Math.abs(y_dist_bot))
-								max_y_dist = (int)vely + y_dist_bot;
-						
-						if( (x_dist_left < 0 && velx > 0) || (x_dist_left > 0 && velx < 0))
-							if(Math.abs(max_x_dist) >= Math.abs(x_dist_left))
-								max_x_dist = (int)velx + x_dist_left;
-	
-						if( (x_dist_right < 0 && velx > 0) || (x_dist_right > 0 && velx < 0))
-							if(Math.abs(max_x_dist) >= Math.abs(x_dist_right))
-								max_x_dist = (int)velx + x_dist_right;
-					}
-					else if(b.getType() == "laser")
-					{
-						if(stunTime == 0)
-						stunPlayer();
-					}
-					
-				}
-			}
-		}
 		
 		boolean collided_y = max_y_dist != vely;
 		boolean collided_x = max_x_dist != velx;
@@ -226,5 +166,17 @@ public class Player {
 		
 		last_velx = (int)velx;
 		last_vely = (int)vely;
+	}
+	
+	int getSpeed() {
+		return 0;
+	}
+	
+	String getType() {
+		return "player";
+	}
+	
+	public String getImage() {
+		return "beiber";
 	}
 }
