@@ -95,7 +95,7 @@ public class Player {
 			,{x,y+height}
 		};
 		boolean eaten = false;
-		for(CollisionObject s : game.objects){
+		for(CollisionObject s : game.collision_objects){
 			int[][] s_corners = s.getCorners();
 			for(int i = 0; i < corners.length; i++){
 				if(corners[i][0] > s_corners[0][0] && corners[i][0] < s_corners[2][0]
@@ -130,7 +130,7 @@ public class Player {
 		
 		
 		//test for collision with all sharks, and only let them fall to the closest shark and not through it
-		for(CollisionObject b : game.objects){
+		for(CollisionObject b : game.collision_objects){
 			//check player collisions with each corner of the player
 			int[][] player_corners = new int[][]{
 					 {nx,ny}
