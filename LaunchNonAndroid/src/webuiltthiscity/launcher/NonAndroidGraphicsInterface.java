@@ -1,6 +1,7 @@
 package webuiltthiscity.launcher;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,8 +68,9 @@ public class NonAndroidGraphicsInterface implements GraphicsInterface{
 		frame.repaint();
 	}
 	public void fill(int color) {
-		Graphics g = buffer.getGraphics();
-		g.setColor(new Color(color));
+		Graphics2D g = (Graphics2D)buffer.getGraphics();
+		Color paint = new Color( (color >> 16) & 0xff, (color >> 8) & 0xff,(color >> 0) & 0xff,(color >> 24) & 0xff);
+		g.setColor(paint);
 		g.fillRect(0, 0, 900, 600);
 	}
 	public void updateDisplay() {

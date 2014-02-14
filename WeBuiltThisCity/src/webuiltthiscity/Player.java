@@ -8,6 +8,8 @@ public class Player {
 	//velx is the change in the players x per tick
 	public double velx,vely;
 	
+	public double velx_cap = 1000,vely_cap = 30;
+	
 	//gravity is the constant added to vely every tick
 	public double gravity = 4;
 	
@@ -43,6 +45,19 @@ public class Player {
 	}
 	
 	public void tick(){
+		
+		handleUserInput();
+		
+		detectCollisionsAndStep();
+		
+		checkIfEaten();
+		
+		//update the players score
+		long elapsed_time =  System.currentTimeMillis() - game.start_time;
+		score = (int) (elapsed_time/1000);
+	}
+	
+	private void handleUserInput(){
 		boolean[] buttons = game.machine_interface.getButtonStatus();
 		//if(buttons[MachineInterface.BUTTON_UP]){}// up
 		//if(buttons[MachineInterface.BUTTON_DOWN]){}// down
@@ -62,9 +77,33 @@ public class Player {
 		if(!buttons[MachineInterface.BUTTON_LEFT] && !buttons[MachineInterface.BUTTON_RIGHT]){
 			velx = 0;
 		}
-		
+	}
+	
+	private void checkIfEaten(){
+		int[][] corners = new int[][]{
+			 {x,y}
+			,{x+width,y}
+			,{x+width,y+height}
+			,{x,y+height}
+		};
+		boolean eaten = false;
+		for(Shark s : game.sharks){
+			int[][] s_corners = s.getCorners();
+			for(int i = 0; i < corners.length; i++){
+				if(corners[i][0] > s_corners[0][0] && corners[i][0] < s_corners[2][0]
+				 &&corners[i][1] > s_corners[0][1] && corners[i][1] < s_corners[2][1])
+					eaten = true;
+			}
+		}
+		if(eaten){
+			//life--;
+			y -= height*3/2;
+		}
+	}
+	
+	private void detectCollisionsAndStep(){	
 		vely += gravity;
-		
+	
 		//predict the next player position and test its collision
 		int nx = (int) (x+velx);
 		int ny = (int) (y+vely);
@@ -136,13 +175,6 @@ public class Player {
 		if(collided_y || collided_x){
 			max_x_dist -= Shark.shark_speed;
 		}
-		if(collided_x){
-			//this is temporary, needs more work
-			
-			//move player up away from shark
-			y -= height*2;
-			life--;
-		}
 		
 		//update velocities to reflect collisions
 		velx = max_x_dist;
@@ -152,20 +184,26 @@ public class Player {
 		x = x + (int)velx;
 		y = y + (int)vely;
 		
-		//add effects due to gravity
-		//update physics records used for jumping and stuff
-		last_velx = (int)velx;
-		last_vely = (int)vely;
-		
-		//update the players score
-		long elapsed_time =  System.currentTimeMillis() - game.start_time;
-		score = (int) (elapsed_time/1000);
-		
-		//THIS IS THE DEATH CODE
+		//keep player in screen
+		if(x < 0) 
+			x = 0;
+		if(x > game.graphics_interface.getDrawAreaDimensions()[0] - width)
+			x = game.graphics_interface.getDrawAreaDimensions()[0] - width;
+
+		//vertical wrap
 		if(y > game.graphics_interface.getDrawAreaDimensions()[1]) {
 			y = -height;
 			vely = 0;
 			System.out.println(--life);
 		}
+		
+		//cap velocities
+		if(velx > velx_cap) velx = velx_cap;
+		if(velx < -velx_cap) velx = -velx_cap;
+		if(vely > velx_cap) vely = vely_cap;
+		if(vely < -velx_cap) vely = -vely_cap;
+		
+		last_velx = (int)velx;
+		last_vely = (int)vely;
 	}
 }

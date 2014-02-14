@@ -13,7 +13,7 @@ public class GameMain {
 	public long start_time;
 	
 	//how many ticks between attempting to spawn sharks
-	public int frequency = 9;
+	public int frequency = 14;
 	
 	//current tick
 	public int tick = 0;
@@ -110,12 +110,12 @@ public class GameMain {
 			int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 			
 			int spawn_x = screen_w;
-			int spawn_y_min = screen_w/10;
-			int spawn_y_max = screen_w*9/10;
+			int spawn_y_min = screen_h/10;
+			int spawn_y_max = screen_h*4/5;
 			int shark_width_min = screen_w/8;
 			int shark_width_max = screen_w/6;
-			int shark_height_min = screen_h/16;
-			int shark_height_max = screen_h/8;
+			int shark_height_min = screen_h/8;
+			int shark_height_max = screen_h/6;
 			
 			b.x = spawn_x;
 			b.y = (int)(Math.random()*(spawn_y_max-spawn_y_min) + spawn_y_min);
@@ -127,8 +127,7 @@ public class GameMain {
 			//so this doesn't work right
 			boolean good_spot = true;
 			for(Shark bb : sharks){
-				double dist = b.dist(bb);
-				if(dist < 45)good_spot = false;
+				good_spot = good_spot && b.overlaps(bb);
 			}
 			
 			//if(good_spot)
@@ -138,25 +137,26 @@ public class GameMain {
 	//tick the world one frame
 	public void tick(){
 		
-		//tick all sharks
-		handleSharks();
-		
-		//tick the player
-		player.tick();
-		
-		//recalculate the time running
-		long time_running = System.currentTimeMillis() - start_time;
-		
-		//sharks will double in speed after the first 10 seconds and
-		//continue speeding up in a linear way
-		Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
-		
+		if(player.life > 0){
+			//tick all sharks
+			handleSharks();
+			
+			//tick the player
+			player.tick();
+			
+			//recalculate the time running
+			long time_running = System.currentTimeMillis() - start_time;
+			
+			//sharks will double in speed after the first 10 seconds and
+			//continue speeding up in a linear way
+			Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
+		}
 		//paint the graphics to the screen
 		paint();
 	}
 	public void paint(){
 		//                 R  << 16  +    G << 8  +   B
-		int beiber_blue = (57 << 16) + (112 << 8) + 143;
+		int beiber_blue = (255 << 24) + (57 << 16) + (112 << 8) + 143;
 		graphics_interface.fill(beiber_blue);
 		
 		//draw beiber
@@ -170,6 +170,13 @@ public class GameMain {
 		//draw the player life and score in the top left of the screen
 		graphics_interface.drawText( "" + player.life + "     " + player.score, 20,20);
 		
+		//dim screen
+		int gray = (120 << 24) + (0 << 16) + (0 << 8) + (0 << 0);
+		
+		if(player.life <= 0){
+			graphics_interface.fill(gray);
+		}
+
 		//All painting goes to a buffer, to push the buffer to the screen call updateDisplay()
 		graphics_interface.updateDisplay();
 	}
