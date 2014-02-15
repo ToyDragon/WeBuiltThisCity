@@ -13,7 +13,11 @@ public class GameMain {
 	public long start_time;
 	
 	//how many ticks between attempting to spawn sharks
+<<<<<<< HEAD
 	public int frequency = 9;
+=======
+	public int frequency = 14;
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 	
 	//current tick
 	public int tick = 0;
@@ -81,6 +85,7 @@ public class GameMain {
 		int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 		
 		sharks = new ArrayList<Shark>();
+<<<<<<< HEAD
 		
 		//all sharks spawn off screen, so this one provides an initial platform for beiber
 		Shark first_shark = new Shark();
@@ -91,6 +96,16 @@ public class GameMain {
 		first_shark.h = 75;
 		
 		machine_interface.log("First shark top: " + first_shark.y);
+=======
+		
+		//all sharks spawn off screen, so this one provides an initial platform for beiber
+		Shark first_shark = new Shark();
+		
+		first_shark.x = screen_w/4;
+		first_shark.y = screen_h - 100;
+		first_shark.w = screen_w;
+		first_shark.h = 75;
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 		
 		sharks.add(first_shark);
 	}
@@ -110,6 +125,7 @@ public class GameMain {
 			Shark b = new Shark();
 			int screen_w = graphics_interface.getDrawAreaDimensions()[0];
 			int screen_h = graphics_interface.getDrawAreaDimensions()[1];
+<<<<<<< HEAD
 			
 			int spawn_x = screen_w;
 			int spawn_y_min = screen_w/10;
@@ -124,13 +140,33 @@ public class GameMain {
 			b.w = (int)(Math.random()*(shark_width_max-shark_width_min) + shark_width_min);
 			b.h = (int)(Math.random()*(shark_height_max-shark_height_min) + shark_height_min);
 			
+=======
+			
+			int spawn_x = screen_w;
+			int spawn_y_min = screen_h/10;
+			int spawn_y_max = screen_h*4/5;
+			int shark_width_min = screen_w/8;
+			int shark_width_max = screen_w/6;
+			int shark_height_min = screen_h/8;
+			int shark_height_max = screen_h/6;
+			
+			b.x = spawn_x;
+			b.y = (int)(Math.random()*(spawn_y_max-spawn_y_min) + spawn_y_min);
+			b.w = (int)(Math.random()*(shark_width_max-shark_width_min) + shark_width_min);
+			b.h = (int)(Math.random()*(shark_height_max-shark_height_min) + shark_height_min);
+			
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 			//don't make sharks too close, this is where the sharks should be
 			//spawned in a way that isn't impossible. shark.dist is dumb right now
 			//so this doesn't work right
 			boolean good_spot = true;
 			for(Shark bb : sharks){
+<<<<<<< HEAD
 				double dist = b.dist(bb);
 				if(dist < 45)good_spot = false;
+=======
+				good_spot = good_spot && b.overlaps(bb);
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 			}
 			
 			//if(good_spot)
@@ -139,6 +175,7 @@ public class GameMain {
 	}
 	//tick the world one frame
 	public void tick(){
+<<<<<<< HEAD
 		
 		//tick all sharks
 		handleSharks();
@@ -153,12 +190,33 @@ public class GameMain {
 		//continue speeding up in a linear way
 		Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
 		
+=======
+		
+		if(player.life > 0){
+			//tick all sharks
+			handleSharks();
+			
+			//tick the player
+			player.tick();
+			
+			//recalculate the time running
+			long time_running = System.currentTimeMillis() - start_time;
+			
+			//sharks will double in speed after the first 10 seconds and
+			//continue speeding up in a linear way
+			Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
+		}
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 		//paint the graphics to the screen
 		paint();
 	}
 	public void paint(){
 		//                 R  << 16  +    G << 8  +   B
+<<<<<<< HEAD
 		int beiber_blue = (57 << 16) + (112 << 8) + 143;
+=======
+		int beiber_blue = (255 << 24) + (57 << 16) + (112 << 8) + 143;
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 		graphics_interface.fill(beiber_blue);
 		
 		//draw beiber
@@ -172,6 +230,16 @@ public class GameMain {
 		//draw the player life and score in the top left of the screen
 		graphics_interface.drawText( "" + player.life + "     " + player.score, 20,20);
 		
+<<<<<<< HEAD
+=======
+		//dim screen
+		int gray = (120 << 24) + (0 << 16) + (0 << 8) + (0 << 0);
+		
+		if(player.life <= 0){
+			graphics_interface.fill(gray);
+		}
+
+>>>>>>> 2024b2c76d5632aa4450342f68c2e34fa8021352
 		//All painting goes to a buffer, to push the buffer to the screen call updateDisplay()
 		graphics_interface.updateDisplay();
 	}

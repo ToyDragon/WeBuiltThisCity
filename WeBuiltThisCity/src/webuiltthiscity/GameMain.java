@@ -13,13 +13,13 @@ public class GameMain {
 	public long start_time;
 	
 	//how many ticks between attempting to spawn sharks
-	public int frequency = 9;
+	public int frequency = 14;
 	
 	//current tick
 	public int tick = 0;
 	
 	Player player;	
-	ArrayList<Shark> sharks;
+	ArrayList<CollisionObject> collision_objects;
 	
 	public GameMain(){}
 	
@@ -80,7 +80,7 @@ public class GameMain {
 		int screen_w = graphics_interface.getDrawAreaDimensions()[0];
 		int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 		
-		sharks = new ArrayList<Shark>();
+		collision_objects = new ArrayList<CollisionObject>();
 		
 		//all sharks spawn off screen, so this one provides an initial platform for beiber
 		Shark first_shark = new Shark();
@@ -90,14 +90,14 @@ public class GameMain {
 		first_shark.w = screen_w;
 		first_shark.h = 75;
 		
-		sharks.add(first_shark);
+		collision_objects.add(first_shark);
 	}
 	public void handleSharks(){
 		//remove all of the sharks that are off screen from the physics and drawing
-		for(int i = sharks.size()-1; i >= 0; i--){
-			sharks.get(i).tick();
-			if(sharks.get(i).x + sharks.get(i).w < -50){
-				sharks.remove(i);
+		for(int i = collision_objects.size()-1; i >= 0; i--){
+			collision_objects.get(i).tick();
+			if(collision_objects.get(i).x + collision_objects.get(i).w < -50){
+				collision_objects.remove(i);
 			}
 		}
 			
@@ -110,12 +110,12 @@ public class GameMain {
 			int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 			
 			int spawn_x = screen_w;
-			int spawn_y_min = screen_w/10;
-			int spawn_y_max = screen_w*9/10;
+			int spawn_y_min = screen_h/10;
+			int spawn_y_max = screen_h*4/5;
 			int shark_width_min = screen_w/8;
 			int shark_width_max = screen_w/6;
-			int shark_height_min = screen_h/16;
-			int shark_height_max = screen_h/8;
+			int shark_height_min = screen_h/8;
+			int shark_height_max = screen_h/6;
 			
 			b.x = spawn_x;
 			b.y = (int)(Math.random()*(spawn_y_max-spawn_y_min) + spawn_y_min);
@@ -126,50 +126,57 @@ public class GameMain {
 			//spawned in a way that isn't impossible. shark.dist is dumb right now
 			//so this doesn't work right
 			boolean good_spot = true;
-			for(Shark bb : sharks){
-				double dist = b.dist(bb);
-				if(dist < 45)good_spot = false;
+			for(CollisionObject bb : collision_objects){
+				good_spot = good_spot && b.overlaps(bb);
 			}
 			
 			//if(good_spot)
-				sharks.add(b);
+				collision_objects.add(b);
 		}
 	}
 	//tick the world one frame
 	public void tick(){
 		
-		//tick all sharks
-		handleSharks();
-		
-		//tick the player
-		player.tick();
-		
-		//recalculate the time running
-		long time_running = System.currentTimeMillis() - start_time;
-		
-		//sharks will double in speed after the first 10 seconds and
-		//continue speeding up in a linear way
-		Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
-		
+		if(player.life > 0){
+			//tick all sharks
+			handleSharks();
+			
+			//tick the player
+			player.tick();
+			
+			//recalculate the time running
+			long time_running = System.currentTimeMillis() - start_time;
+			
+			//sharks will double in speed after the first 10 seconds and
+			//continue speeding up in a linear way
+			Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
+		}
 		//paint the graphics to the screen
 		paint();
 	}
 	public void paint(){
 		//                 R  << 16  +    G << 8  +   B
-		int beiber_blue = (57 << 16) + (112 << 8) + 143;
+		int beiber_blue = (255 << 24) + (57 << 16) + (112 << 8) + 143;
 		graphics_interface.fill(beiber_blue);
 		
 		//draw beiber
 		graphics_interface.drawImage("baseball_thing", player.x, player.y, player.width, player.height);
 		
 		//draw all of the sharks
-		for(Shark b : sharks){
+		for(CollisionObject b : collision_objects){
 			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
 		}
 		
 		//draw the player life and score in the top left of the screen
 		graphics_interface.drawText( "" + player.life + "     " + player.score, 20,20);
 		
+		//dim screen
+		int gray = (120 << 24) + (0 << 16) + (0 << 8) + (0 << 0);
+		
+		if(player.life <= 0){
+			graphics_interface.fill(gray);
+		}
+
 		//All painting goes to a buffer, to push the buffer to the screen call updateDisplay()
 		graphics_interface.updateDisplay();
 	}
