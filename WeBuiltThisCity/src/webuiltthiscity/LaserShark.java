@@ -1,5 +1,8 @@
 package webuiltthiscity;
 import java.util.Random;
+
+import webuiltthiscity.GameMain;
+import webuiltthiscity.Laser;
 public class LaserShark extends Shark{
 	
 	private int laser_ticks;
@@ -20,7 +23,7 @@ public class LaserShark extends Shark{
 	}
 	public void shootLaser()
 	{
-		
+		GameMain.collision_objects.add(new Laser());
 	}
 
 }
