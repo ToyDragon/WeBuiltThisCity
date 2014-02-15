@@ -3,30 +3,27 @@ package webuiltthiscity;
 import java.util.ArrayList;
 
 public class GameMain {
+	
+	//Used for interfacing with the system. Will be set by
+	//system launchers after GameMain is initialized
 	public MachineInterface machine_interface;
 	public GraphicsInterface graphics_interface;
-	public static int block_speed = 8;
-	public static int base_speed = 8;
-	public int x,y;
-	public int player_w = 50,player_h = 50;
-	public double velx,vely;
-	public double gravity = 4;
-	public double jumpspeed = 25;
-	public double speed = 10;
-	boolean collided_last_tick;
+	
+	//time in millis that the game started; used to calculate score.
+	public long start_time;
+	
+	//how many ticks between attempting to spawn sharks
 	public int frequency = 9;
+	
+	//current tick
 	public int tick = 0;
 	
-	int score = 0;
-	
-	int life = 5;
-	
-	ArrayList<Block> blocks = new ArrayList<Block>();
+	Player player;	
+	ArrayList<Shark> sharks;
 	
 	public GameMain(){}
 	
 	public void setMachineInterface(MachineInterface machine_interface){
-		machine_interface.log("Set machine interface to " + machine_interface);
 		this.machine_interface = machine_interface;
 	}
 	public void setGraphicsInterface(GraphicsInterface graphics_interface){
@@ -34,165 +31,148 @@ public class GameMain {
 	}
 	
 	public void init(){
-		machine_interface.log("Hello World!");
-		machine_interface.log("This is a test");
-		int[] screen_size = graphics_interface.getDrawAreaDimensions();
+		//grab start time
+		start_time = System.currentTimeMillis();
+	
+		//initialize player
+		player = new Player(this);
 		
-		x = screen_size[0] / 4;
-		y = screen_size[1] - 275;
+		//initialize sharks
+		initSharks();
 		
-		
-		Block floor = new Block();
-		floor.x = screen_size[0]/4;
-		floor.y = screen_size[1] - 100;
-		floor.w = screen_size[0]/2;
-		floor.h = 75;
-		
-		blocks.add(floor);
-		
+		//this loop will call the tick() method and repeat 30 times a second
 		Thread game_loop = new Thread(){
+			
 			public void run(){
+		
+				//milli seconds per tick
 				long time_target = 1000/30;
+				
+				//repeat until the application closes
 				while(true){
+					
+					//grab time before executing the tick
 					long start_time = System.currentTimeMillis();
+					//execute the tick
 					tick();
 					try{
+						//grab the time elapsed since before executing tick
 						long time_elapsed = System.currentTimeMillis() - start_time;
-						Thread.sleep(Math.max(0,time_target - time_elapsed));
-					}catch(InterruptedException e){}// this sleep should never be interrupted
+						//set time_to_sleep to target-elapsed, and make sure it is not a negative number
+						long time_to_sleep = Math.max(0,time_target - time_elapsed);
+						//pause this thread for that long
+						Thread.sleep(time_to_sleep);
+					}catch(InterruptedException e){
+						//Thread.sleep() can only be manually interrupted, which we never do.
+						//This catch will never execute.
+					}
 				}
+	
 			}
+		
 		};
+		
+		//call game_loop.run() in a new system thread
 		game_loop.start();
 	}
 	
-	public void tick(){
-		boolean[] buttons = machine_interface.getButtonStatus();
-		if(buttons[0]){// up
-					
+	public void initSharks(){
+		int screen_w = graphics_interface.getDrawAreaDimensions()[0];
+		int screen_h = graphics_interface.getDrawAreaDimensions()[1];
+		
+		sharks = new ArrayList<Shark>();
+		
+		//all sharks spawn off screen, so this one provides an initial platform for beiber
+		Shark first_shark = new Shark();
+		
+		first_shark.x = screen_w/4;
+		first_shark.y = screen_h - 100;
+		first_shark.w = screen_w;
+		first_shark.h = 75;
+		
+		machine_interface.log("First shark top: " + first_shark.y);
+		
+		sharks.add(first_shark);
+	}
+	public void handleSharks(){
+		//remove all of the sharks that are off screen from the physics and drawing
+		for(int i = sharks.size()-1; i >= 0; i--){
+			sharks.get(i).tick();
+			if(sharks.get(i).x + sharks.get(i).w < -50){
+				sharks.remove(i);
+			}
 		}
-		if(buttons[1]){// left
-			velx = -speed;
-		}
-		if(buttons[2]){// down
 			
-		}
-		if(buttons[3]){// right
-			velx = speed;
-		}
-		if(buttons[4]){// jump
-			if(collided_last_tick){
-				//machine_interface.log("Jump!");
-				vely = -jumpspeed;
-			}
-		}
-		if(!buttons[1] && !buttons[3]){
-			velx = 0;
-		}
-		
-		if(collided_last_tick){
-			vely = Math.min(0, vely);
-		}
-		
-		int nx = (int) (x+velx);
-		int ny = (int) (y+vely);
-
-		boolean collide = false;
-		int min_y_dist = (int)100;
-		for(Block b : blocks){
-			int[][] player_corners = new int[][]{
-					{nx,ny},
-					{nx+player_w,ny},
-					{nx+player_w,ny+player_h},
-					{nx,ny+player_h}
-			};
-			for(int i = 0; i < 4; i++){
-				int tx = player_corners[i][0];
-				int ty = player_corners[i][1];
-				if(tx >= b.x && tx <= b.x+b.w && ty >= b.y && ty <= b.y + b.h){
-					if(ty - b.y < min_y_dist){
-						min_y_dist = ty - b.y;
-					}
-					collide = true;
-				}
-			}
-		}
-		if(collide)nx -= block_speed;
-		x = nx;
-		y = ny;
-		if(y >= graphics_interface.getDrawAreaDimensions()[1] + player_h){
-			y -= graphics_interface.getDrawAreaDimensions()[1] + player_h;
-			life--;
-		}
-		if(x <= -player_w){
-			x += graphics_interface.getDrawAreaDimensions()[0] + player_w;
-			life-=5;
-		}
-		if(x >= graphics_interface.getDrawAreaDimensions()[0]){
-			x -= graphics_interface.getDrawAreaDimensions()[0] + player_w;
-			life+=4;
-			score++;
-			base_speed+=2;
-		}
-		if(collide){
-			y -= min_y_dist;
-		}
-		
-		
-		vely += gravity;
-		int cap = 40;
-		if(vely > cap)vely=cap;
-		
-		for(int i = blocks.size()-1; i >= 0; i--){
-			blocks.get(i).tick();
-			if(blocks.get(i).x + blocks.get(i).w < -50){
-				blocks.remove(i);
-				//machine_interface.log("Removed!");
-			}
-		}
+		//create a new shark every (frequency) amt of ticks
 		tick++;
-		//machine_interface.log("" + tick + " < " + frequency);
 		if(tick >= frequency){
 			tick = 0;
-			Block b = new Block();
-			int width = graphics_interface.getDrawAreaDimensions()[0];
-			int height = graphics_interface.getDrawAreaDimensions()[1];
-			b.x = width;
-			b.y = (int)(Math.random()*height);
-			b.w = (int)(Math.random()*.125*width + .125*width);
-			b.h = (int)(Math.random()*.0625*height + .0625*height);
+			Shark b = new Shark();
+			int screen_w = graphics_interface.getDrawAreaDimensions()[0];
+			int screen_h = graphics_interface.getDrawAreaDimensions()[1];
 			
+			int spawn_x = screen_w;
+			int spawn_y_min = screen_w/10;
+			int spawn_y_max = screen_w*9/10;
+			int shark_width_min = screen_w/8;
+			int shark_width_max = screen_w/6;
+			int shark_height_min = screen_h/16;
+			int shark_height_max = screen_h/8;
+			
+			b.x = spawn_x;
+			b.y = (int)(Math.random()*(spawn_y_max-spawn_y_min) + spawn_y_min);
+			b.w = (int)(Math.random()*(shark_width_max-shark_width_min) + shark_width_min);
+			b.h = (int)(Math.random()*(shark_height_max-shark_height_min) + shark_height_min);
+			
+			//don't make sharks too close, this is where the sharks should be
+			//spawned in a way that isn't impossible. shark.dist is dumb right now
+			//so this doesn't work right
 			boolean good_spot = true;
-			for(Block bb : blocks){
+			for(Shark bb : sharks){
 				double dist = b.dist(bb);
-				//machine_interface.log(""+dist);
 				if(dist < 45)good_spot = false;
 			}
-			if(good_spot)
-				blocks.add(b);
-			//machine_interface.log("" + b.x + ", " + b.x + ", " + b.w + ", " + b.h);
+			
+			//if(good_spot)
+				sharks.add(b);
 		}
-		collided_last_tick = collide;
+	}
+	//tick the world one frame
+	public void tick(){
 		
+		//tick all sharks
+		handleSharks();
 		
-		int dif = x - graphics_interface.getDrawAreaDimensions()[0]/4;
-		double scale = dif/(graphics_interface.getDrawAreaDimensions()[0]/4.0) + 1;
-		if(dif<0) block_speed = base_speed;
-		else block_speed = (int)(scale*base_speed);
+		//tick the player
+		player.tick();
 		
+		//recalculate the time running
+		long time_running = System.currentTimeMillis() - start_time;
+		
+		//sharks will double in speed after the first 10 seconds and
+		//continue speeding up in a linear way
+		Shark.shark_speed = (int)(Shark.initial_speed * (1 + time_running/10000.0));
+		
+		//paint the graphics to the screen
 		paint();
 	}
 	public void paint(){
-		//int x = 50  + (int) (50 * Math.sin(System.currentTimeMillis()/750d));
+		//                 R  << 16  +    G << 8  +   B
+		int beiber_blue = (57 << 16) + (112 << 8) + 143;
+		graphics_interface.fill(beiber_blue);
 		
-		graphics_interface.fill((57 << 16) + (112 << 8) + (143 << 0));
-		graphics_interface.drawImage("baseball_thing", (int)x, (int)y, player_w, player_h);
+		//draw beiber
+		graphics_interface.drawImage("baseball_thing", player.x, player.y, player.width, player.height);
 		
-		for(Block b : blocks){
+		//draw all of the sharks
+		for(Shark b : sharks){
 			graphics_interface.drawImage("block", b.x, b.y, b.w, b.h);
 		}
 		
-		graphics_interface.drawText( "" + life + "     " + score, 20,20);
+		//draw the player life and score in the top left of the screen
+		graphics_interface.drawText( "" + player.life + "     " + player.score, 20,20);
+		
+		//All painting goes to a buffer, to push the buffer to the screen call updateDisplay()
 		graphics_interface.updateDisplay();
 	}
 }

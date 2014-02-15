@@ -58,6 +58,7 @@ public class Launch {
 		JFrame frame = new JFrame("We Built This City!");
 		graphics_interface.frame = frame;
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		frame.getContentPane().setPreferredSize(new Dimension(900,600));
 		frame.getContentPane().add(new JPanel(){
 			private static final long serialVersionUID = 1L;
